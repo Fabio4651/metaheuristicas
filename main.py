@@ -1,4 +1,4 @@
-"""def addStreet:
+"""def addStreets:
     streetName = input("Street Name:")
     streetVertices = input("Street Vertices:")"""
 
