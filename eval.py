@@ -5,4 +5,4 @@ street_vertices = [eval(point) for point in vertices]
 square_number = eval('number * number')
 print(square_number)
 
-# Output: 81
+# Output: 81ss
