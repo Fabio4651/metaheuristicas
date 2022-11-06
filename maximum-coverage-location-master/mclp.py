@@ -160,18 +160,24 @@ def plot_result(points,opt_sites,radius):
         ax.add_artist(circle)
     ax.axis('equal')
     ax.tick_params(axis='both',left=False, top=False, right=False,
-                       bottom=False, labelleft=False, labeltop=False,
-                       labelright=False, labelbottom=False)
+                       bottom=False, labelleft=True, labeltop=False,
+                       labelright=False, labelbottom=True)
     
 Npoints = 300
 points,_ = make_moons(Npoints,noise=0.15)
+#points = 
+
+#dat = ','.join(np.loadtxt('output.csv',str, delimiter='\n')).split(',')
+#test = np.array(dat, float)
+
+test = np.loadtxt('output.csv', delimiter = ',')
 
     
 # Number of sites to select
 K = 20
 
 # Service radius of each site
-radius = 0.2
+radius = 0.1
 
 # Candidate site size (random sites generated)
 M = 100
@@ -179,9 +185,22 @@ M = 100
 # Run mclp 
 # opt_sites is the location of optimal sites 
 # f is the number of points covered
-opt_sites,f = mclp(points,K,radius,M)
+opt_sites,f = mclp(test,K,radius,M)
+
+print("sites: ")
+print(test)
+#np.savetxt('output.csv', points, delimiter=',')
+print("bruh: ")
 
 # Plot the result 
-plot_result(points,opt_sites,radius)    
+plot_result(test,opt_sites,radius)   
+ 
+"""
+x = np.arange(1,11) 
+y = 2 * x + 5 
+plt.title("Matplotlib demo") 
+plt.xlabel("x axis caption") 
+plt.ylabel("y axis caption") 
+plt.plot(x,y) """
 
 plt.show()
