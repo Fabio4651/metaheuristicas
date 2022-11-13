@@ -36,7 +36,7 @@ SOFTWARE.
 
 import numpy as np
 from scipy.spatial import distance_matrix
-from gurobipy import *
+from gurobipy import Model, GRB, quicksum
 from scipy.spatial import ConvexHull
 from shapely.geometry import Polygon, Point
 from numpy import random
@@ -163,7 +163,7 @@ def plot_result(points,opt_sites,radius):
                        bottom=False, labelleft=True, labeltop=False,
                        labelright=False, labelbottom=True)
     
-Npoints = 300
+Npoints = 20
 points,_ = make_moons(Npoints,noise=0.15)
 #points = 
 
@@ -174,13 +174,13 @@ test = np.loadtxt('output.csv', delimiter = ',')
 
     
 # Number of sites to select
-K = 20
+K = 2
 
 # Service radius of each site
 radius = 0.1
 
 # Candidate site size (random sites generated)
-M = 100
+M = 1200
 
 # Run mclp 
 # opt_sites is the location of optimal sites 
