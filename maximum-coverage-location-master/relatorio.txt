@@ -1,0 +1,44 @@
+
+(slide 1 - intro)
+
+* Explain the problem that you will be solving
+Tentar encontrar uma solução para optimizar a eficiencia da distribuição de postos de carregamento automóvel.
+Este problema pode também equacionar outras soluções, tais como optimizar a distribuição de placards de publicidade.
+Tentamos optimizar os custos de ambos alcancando a maior área possível.
+
+
+* Justify why we need a metaheuristic(s) to solve it
+O uso de metaheuristica irá dar resposta ao problema de efectuar um grande conjunto de cálculos e associados a esses cálculos obter a melhor avaliação de onde colocar ambos os item's, de modo a optimizar o custo para o cliente assim cobrir a maior área possível.
+
+
+* Explain what the search space is (and its size)
+* Explain how you can represent a candidate solution for your problem
+Analisando num plano cartesiano:
+Dado um conjunto de estradas, com intersenções, determinar os vertices e as intersecções entre estradas, de modo a obter uma população inicial de pontos.
+
+
+* Give a mathematical formulation of the problem. That is, explain the fitness/objective function that you are optimizing. 
+
+* Describe what type of instances you will use, and where do you get them from
+
+* Describe what metaheuristcs you plan to implement and apply to your problem
+
+* Show preliminary results (if you have them)
+
+* Given an outline of what else needs to be done
+
+-----------
+
+
+Intro:
+Maximal Covering Location Problem (MCLP) is a combinatorial optimization problem that seeks to find the best locations to place facilities in order to maximize their coverage of a given set of demand points. This problem has many applications, including in facility location planning and supply chain management. In Python, you can use a variety of algorithms and techniques to solve MCLP, such as evolutionary algorithms, heuristics, and metaheuristics. There are also many open-source libraries and packages that can help you implement these algorithms and techniques in Python, such as DEAP and PyGMO.
+
+If you have an array of points on an x,y plane that represent the initial population for a metaheuristic optimization problem such as MCLP, you can use that information to set up the problem and begin searching for solutions. Depending on the algorithm or technique you are using, you may need to represent the points in a specific format or create additional data structures to store information about the problem and the current state of the search. For example, if you are using a genetic algorithm, you might need to create a population of candidate solutions, each represented as a set of points, and evaluate their fitness according to the criteria of the problem. You can then use the genetic operators of selection, crossover, and mutation to evolve the population over multiple generations, in search of better solutions.
+
+
+If you have a Circle class in Python and want to find the best N circles with the maximum number of points inside of them, you can use a metaheuristic optimization algorithm such as a genetic algorithm to search for solutions. In this case, each candidate solution would be represented as a set of N circles, and the fitness of a solution would be calculated based on the number of points inside each circle. You can then use the genetic operators of selection, crossover, and mutation to evolve the population of solutions over multiple generations, in search of the best N circles that have the maximum number of points inside of them.
+
+To calculate the number of points inside a circle, you can use the Euclidean distance between the center of the circle and each point in the set of points. If the distance is less than or equal to the radius of the circle, the point is considered to be inside the circle. You can then sum the number of points inside each circle to calculate the fitness of a solution.
+
+Here is an example of how you might implement this in Python:
+

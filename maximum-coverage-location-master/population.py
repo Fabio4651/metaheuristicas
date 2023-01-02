@@ -57,12 +57,12 @@ def plot_result(points,opt_sites,radius, hull):
     ax[2].tick_params(axis='both',left=False, top=False, right=False,bottom=False, labelleft=True, labeltop=False,labelright=False, labelbottom=True)
     
 # generate random distribution of points
-numPoints = 10
+numPoints = 30
 population,_ = make_moons(numPoints,noise=0.15)
 #points = np.loadtxt('output.csv', delimiter = ',')
 #population = points
 
-M = 100
+M = 200
 hull, poly, candidates = generate_candidates(population, M)
 
 r = 0.3

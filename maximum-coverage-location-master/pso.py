@@ -1,38 +1,3 @@
-"""
-
-Python implementation of the maximum coverage location problem.
-
-The program randomly generates a set of candidate sites, among 
-which the K optimal candidates are selected. The optimization 
-problem is solved by integer programming. 
-
-Author: Can Yang
-Date: 2019-11-22
-
-MIT License
-
-Copyright (c) 2019 Can Yang
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-"""
-
 
 import numpy as np
 from numpy import random
@@ -62,17 +27,6 @@ def generate_candidate_sites(points,M=100):
                              random.uniform(min_y, max_y)])
         if (random_point.within(poly)):
             sites.append(random_point)
-    return np.array([(p.x,p.y) for p in sites])
-
-def generate_candidate_sites_test(points,radius):
-    '''
-    teste onde será criado um circulo no mesmo lugar onde se encontra 1 ponto. com esta solução todos os candidatos têm 1 ponto disponível
-    '''
-    from shapely.geometry import Point
-    sites = []
-    for p in points:
-        random_point = Point([p[0], p[1]])
-        sites.append(random_point)
     return np.array([(p.x,p.y) for p in sites])
 
 def distance_matrix(a,b):
@@ -137,68 +91,18 @@ def mclp(points,K,radius,M):
     D[~condition]=0
     print("bool matrix")
     print(D)
+    #as linhas do matrix nao podem ser alteradas pois correspondem aos valores de cada ponto
+    #as colunas de cada linha corresponde à distancia de cada ponto com 1 circulo
 
-    from gurobipy import Model, GRB, quicksum
-    # Build model
-    m = Model()
-    # Add variables
-    x = {}
-    y = {}
-    for i in range(I):
-      y[i] = m.addVar(vtype=GRB.BINARY, name="y%d" % i)
-    for j in range(J):
-      x[j] = m.addVar(vtype=GRB.BINARY, name="x%d" % j)
-
-    m.update()
-
-    #for j in range(J):
-    #    print(j)
-
-    for j in range(J):
-        print((x[j]))
-
-    # Add constraints | condicoes
-    # condicao: necessários sempre K resultados (circulos / candidatos)
-    m.addConstr(quicksum(x[j] for j in range(J)) == K)
-
-    #print("debug 0")
-    #print(y[0].getValue())
-    #print("m.numVars", m.numVars)
-    #print("m.objVal", m.objVal)
-    #for v in m.getVars():
-    #    print(v)
-    #print("end debug 0")
-
-    #print("debug 1")
-    #for i in range(I):
-    #    for j in np.where(D[i]==1)[0]:
-    #        print(y[i])
-    #        #print(j)
-    #        #print("---")
-
-    # TODO: tentar perceber esta restrição
-    for i in range(I):
-        m.addConstr(quicksum(x[j] for j in np.where(D[i]==1)[0]) >= y[i])
-
-    # TODO: tentar perceber esta restrição
-    m.setObjective(quicksum(y[i]for i in range(I)),GRB.MAXIMIZE)
-    m.setParam('OutputFlag', 0)
-    m.optimize()
     
-    end = time.time()
-    print('----- Output -----')
-    print('  Running time : %s seconds' % float(end-start))
-    print('  Optimal coverage points: %g' % m.objVal)
+
+
     
     solution = []
-    if m.status == GRB.Status.OPTIMAL:
-        #print("solution is optimal")
-        for v in m.getVars():
-            # print v.varName,v.x
-            if v.x==1 and v.varName[0]=="x":
-               solution.append(int(v.varName[1:]))
+    solution.append(1)
+    solution.append(2)
     opt_sites = sites[solution]
-    return opt_sites,m.objVal
+    return opt_sites
 
 def plot_result(points,opt_sites,radius):
     '''
@@ -221,10 +125,9 @@ def plot_result(points,opt_sites,radius):
                        labelright=False, labelbottom=True)
     
 # generate random distribution of points
-Npoints = 30 #10
+Npoints = 10 #10
 points,_ = make_moons(Npoints,noise=1)
 
-#test = np.loadtxt('output.csv', delimiter = ',')
 population = points
     
 # Number of sites to select
@@ -234,29 +137,12 @@ K = 2
 radius = 0.35
 
 # Candidate site size (random sites generated)
-M = 10 #nr de circulos gerados inicialmente
+M = 5 #nr de circulos gerados inicialmente
 
-#Npois = 30 e M = 1500 = working
+opt_sites = mclp(population,K,radius,M)
 
-# Run mclp 
-# opt_sites is the location of optimal sites 
-# f is the number of points covered
-opt_sites,f = mclp(population,K,radius,M)
-
-#print("sites: ")
-#print(population)
-#np.savetxt('output.csv', points, delimiter=',')
-print("-end-")
 
 # Plot the result 
 plot_result(population,opt_sites,radius)   
- 
-"""
-x = np.arange(1,11) 
-y = 2 * x + 5 
-plt.title("Matplotlib demo") 
-plt.xlabel("x axis caption") 
-plt.ylabel("y axis caption") 
-plt.plot(x,y) """
 
 plt.show()
