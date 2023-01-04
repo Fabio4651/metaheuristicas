@@ -1,0 +1,8 @@
+Usar 2 algoritmos para 2 solucoes diferentes:
+
+1-> usar evolucao genetica, onde mutamos para obter melhor resultados(atencao o prof falou de os piores são descartados. analisar isto, pois com isto podemos ter mais 1 algoritmo, que é, descartar os piores e gerar novos, e num outro, alterar os piores(vai de encontro ao indicado anteriormente),
+
+2-> usar o pso. com o pso, tenho de:
+N iterações?
+obter o best -> e a partir deste, gerar mutações nos restantes com velocidade. 
+esta velocidade é um objectivo de modo a tentar aproximar os piores a um resultado correcto.
