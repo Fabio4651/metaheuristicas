@@ -8,9 +8,9 @@ from scipy.spatial import ConvexHull
 from shapely.geometry import Polygon, Point
 
 RADIUS = 0.3
-POINTS_OF_INTEREST_SIZE = 30
-POPULATION_SIZE = 10
-NUM_ITERATIONS = 300
+POINTS_OF_INTEREST_SIZE = 200
+POPULATION_SIZE = 20
+NUM_ITERATIONS = 3000
 NUM_CANDIDATES = 3
 
 def generate_population(points):
@@ -30,7 +30,7 @@ def generate_population(points):
         random_point = Point([random.uniform(min_x, max_x), random.uniform(min_y, max_y)])
         if (random_point.within(poly)):
             population.append(random_point)
-    return np.array([(p.x,p.y) for p in population]), poly
+    return np.array([(p.x,p.y) for p in population]), poly, hull
 
 def fitness(point, points_of_interest):
     # Count the number of points of interest inside the circle
@@ -57,7 +57,7 @@ def GA(pol, points_of_interest, population):
 
     for i in range(NUM_ITERATIONS):
         # Evaluate the fitness of each point in the population
-        fitness_values = [fitness(point, points_of_interest) for point in population]
+        fitness_values = [fitness(circle, points_of_interest) for circle in population]
 
         # Select the best point from the population
         best_point = population[fitness_values.index(max(fitness_values))]
@@ -83,17 +83,22 @@ def GA(pol, points_of_interest, population):
     best_points = sorted_population[:NUM_CANDIDATES]
     return best_points
 
-def plot_result(points, population, candidates):
+def plot_result(points, population, candidates, hull):
     pyplot.figure(figsize=(8,8))
     pyplot.scatter(points[:,0],points[:,1],c='C0')
     ax = pyplot.gca()
+
+    #hull draw
+    #ax.plot(points[hull.vertices,0], points[hull.vertices,1], 'r--', lw=2)
+    #ax.plot(points[hull.vertices[0],0], points[hull.vertices[0],1], 'ro')
+
     pyplot.scatter(population[:,0],population[:,1],c='C1',marker='+')
     for site in population:
         circle = pyplot.Circle(site, RADIUS, color='C1',fill=False,lw=2)
         ax.add_artist(circle)
 
     for site in candidates:
-        circle = pyplot.Circle(site, RADIUS, color='#9467bd',fill=False,lw=2)
+        circle = pyplot.Circle(site, RADIUS, color='green',fill=False,lw=2)
         ax.add_artist(circle)
 
     ax.axis('equal')
@@ -103,11 +108,11 @@ def plot_result(points, population, candidates):
 
 
 # Generate random POI's
-pois, y = generate_pois(POINTS_OF_INTEREST_SIZE, noise=0.5)
+pois, y = generate_pois(POINTS_OF_INTEREST_SIZE, noise=1)
 
 # Generate initial population(all circles)
-population, polygon = generate_population(pois)
+population, polygon, hull = generate_population(pois)
 candidates = GA(polygon, pois, population)
-plot_result(pois, population, candidates)
+plot_result(pois, population, candidates, hull)
 
 pyplot.show()
