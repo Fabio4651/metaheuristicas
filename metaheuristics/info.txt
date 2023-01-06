@@ -43,9 +43,9 @@ dificuldades: a solucao retornar mais que 1 candidato; na mutação, limitar a m
 suggestions: evolve algorithm to work with geographical (lat long) coordinates
 --
 
-TODO: criar um ficheiro de requirements.txt para o pip install. (1)
+
 TODO: criar 1 ficheiro com os POI's iniciais fixos, para não ser diferente em todas as vezes que se executar o script (1)
-TODO: tentar criar num outro exemplo sem overlap de circulos / candidatos (1)
 TODO: tentar criar animação c/ as diferentes iterações (1)
+TODO: update GA.py para ter também as 2 classes Point e Circle
 
 TODO: relatorio + prints + prints c/ diferentes variações nos valores de POI's, nr de iteracoes, candidatos, etc (3)
