@@ -44,8 +44,9 @@ suggestions: evolve algorithm to work with geographical (lat long) coordinates
 --
 
 
-TODO: criar 1 ficheiro com os POI's iniciais fixos, para não ser diferente em todas as vezes que se executar o script (1)
-TODO: tentar criar animação c/ as diferentes iterações (1)
-TODO: update GA.py para ter também as 2 classes Point e Circle
+DONE: criar 1 ficheiro com os POI's iniciais fixos, para não ser diferente em todas as vezes que se executar o script (1)
+DONE: tentar criar animação c/ as diferentes iterações (1)
+DONE: update GA.py para ter também as 2 classes Point e Circle
+
 
 TODO: relatorio + prints + prints c/ diferentes variações nos valores de POI's, nr de iteracoes, candidatos, etc (3)

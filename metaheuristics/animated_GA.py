@@ -1,17 +1,20 @@
 import numpy as np
 import math
-import time
+#import time
 from numpy import random
 from sklearn.datasets import make_moons as generate_pois
-from matplotlib import pyplot, patches as mpatches
+from matplotlib import pyplot
 from scipy.spatial import ConvexHull
 from shapely.geometry import Polygon, Point as PolygonPoint
+
+import matplotlib.animation as animation
 
 RADIUS = 0.3
 POINTS_OF_INTEREST_SIZE = 200
 POPULATION_SIZE = 10
-NUM_ITERATIONS = 123
+NUM_ITERATIONS = 1000
 NUM_CANDIDATES = 3
+
 
 class Point:
   def __init__(self, x, y):
@@ -57,68 +60,62 @@ def mutate(circle):
 
 def GA():
     # Measure the time taken to initialize the algorithm
-    start_time = time.time()
+    #start_time = time.time()
 
-    for i in range(NUM_ITERATIONS):
-        # Evaluate the fitness of each circle in the population
-        fitness_values = [fitness(circle) for circle in population]
+    #for i in range(NUM_ITERATIONS):
+    # Evaluate the fitness of each circle in the population
+    fitness_values = [fitness(circle) for circle in population]
 
-        # Select the best circle from the population
-        best_circle = population[fitness_values.index(max(fitness_values))]
+    # Select the best circle from the population
+    best_circle = population[fitness_values.index(max(fitness_values))]
 
-        # Generate a new circle by mutating the best circle
-        new_circle = mutate(best_circle)
+    # Generate a new circle by mutating the best circle
+    new_circle = mutate(best_circle)
 
-        # Replace the worst circle in the population with the new circle
-        worst_circle_index = fitness_values.index(min(fitness_values))
-        population[worst_circle_index] = new_circle
+    # Replace the worst circle in the population with the new circle
+    worst_circle_index = fitness_values.index(min(fitness_values))
+    population[worst_circle_index] = new_circle
 
     # Sort the population by fitness value
     sorted_population = sorted(population, key=lambda circle: fitness(circle), reverse=True)
 
     # Measure the time taken to run the algorithm
-    end_time = time.time()
+    #end_time = time.time()
 
     # Print the time taken to initialize the algorithm and run the algorithm
-    #print("Initialization time:", start_time - time.time())
-    print("Running time:", end_time - start_time)
+    #print("Running time:", end_time - start_time)
 
     # Return the best N circles from the final population
     best_circles = sorted_population[:NUM_CANDIDATES]
-    return best_circles
+    return sorted_population, best_circles
 
-def plot_result():
-    pyplot.figure(figsize=(8,8))
-    pyplot.scatter(points_of_interest[:,0],points_of_interest[:,1],c='C0')
+# Function to update the figure
+def update(num):
+    # Run the algorithm for one iteration
+    temp_population, temp_candidates = GA()
+    artists = []
 
-    ax = pyplot.gca()
+    # Create new circle objects
+    best_circles_circles = temp_candidates
+    all_circles_circles = temp_population
 
-    pois_legend = mpatches.Patch(color='C0', label='Points of interest')
-    population_legend = mpatches.Patch(color='C1', label='Population')
-    candidates_legend = mpatches.Patch(color='green', label='Best candidates')
-
-    # Hull draw
-    ax.plot(points_of_interest[hull.vertices,0], points_of_interest[hull.vertices,1], 'r--', lw=2)
-    ax.plot(points_of_interest[hull.vertices[0],0], points_of_interest[hull.vertices[0],1], 'ro')
-
-    for site in population:
-        pyplot.scatter(site.center.x, site.center.y,c='C1',marker='+')
+    for site in all_circles_circles:
+        marker = pyplot.scatter(site.center.x, site.center.y,c='C1',marker='+')
         circle = pyplot.Circle((site.center.x, site.center.y), RADIUS, color='C1',fill=False,lw=2)
+        ax.add_artist(marker)
         ax.add_artist(circle)
+        artists.append(marker)
+        artists.append(circle)
 
-    for site in candidates:
-        pyplot.scatter(site.center.x, site.center.y,c='green',marker='+')
+    for site in best_circles_circles:
+        marker = pyplot.scatter(site.center.x, site.center.y,c='green',marker='+')
         circle = pyplot.Circle((site.center.x, site.center.y), RADIUS, color='green',fill=False,lw=2)
+        ax.add_artist(marker)
         ax.add_artist(circle)
+        artists.append(marker)
+        artists.append(circle)
 
-    # Add a legend
-    ax.legend(handles=[pois_legend, population_legend, candidates_legend])
-
-    ax.axis('equal')
-    ax.tick_params(axis='both',left=False, top=False, right=False,
-                       bottom=False, labelleft=True, labeltop=False,
-                       labelright=False, labelbottom=True)
-
+    return artists
 
 # Generate random POI's
 #points_of_interest, y = generate_pois(POINTS_OF_INTEREST_SIZE, noise=1)
@@ -126,7 +123,35 @@ points_of_interest = np.loadtxt('./inputs/200_1.csv', delimiter = ',')
 
 # Generate initial population(all circles)
 population, polygon, hull = generate_population()
-candidates = GA()
-plot_result()
+
+#candidates = GA()
+#candidates = []
+
+best_circles_circles = []
+all_circles_circles = []
+
+# Initialize the figure and axes
+fig, ax = pyplot.subplots()
+
+#pois_legend = mpatches.Patch(color='C0', label='Points of interest')
+#population_legend = mpatches.Patch(color='C1', label='Population')
+#candidates_legend = mpatches.Patch(color='green', label='Best candidates')
+
+# Initialize the pois
+points_scatter = ax.scatter(points_of_interest[:,0],points_of_interest[:,1],c='C0')
+
+# Hull draw
+ax.plot(points_of_interest[hull.vertices,0], points_of_interest[hull.vertices,1], 'r--', lw=2)
+ax.plot(points_of_interest[hull.vertices[0],0], points_of_interest[hull.vertices[0],1], 'ro')
+
+# Create the animation
+ani = animation.FuncAnimation(fig, update, frames=NUM_ITERATIONS, blit=True)
+
+# Add a legend
+#ax.legend(handles=[pois_legend, population_legend, candidates_legend])
+ax.axis('equal')
+ax.tick_params(axis='both',left=False, top=False, right=False,
+                       bottom=False, labelleft=True, labeltop=False,
+                       labelright=False, labelbottom=True)
 
 pyplot.show()
