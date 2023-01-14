@@ -180,4 +180,7 @@ ax.tick_params(axis='both',left=False, top=False, right=False,
                        bottom=False, labelleft=True, labeltop=False,
                        labelright=False, labelbottom=True)
 
-pyplot.show()
+# save the animation as a gif file
+ani.save('animation.gif', writer='imagemagick')
+
+#pyplot.show()
