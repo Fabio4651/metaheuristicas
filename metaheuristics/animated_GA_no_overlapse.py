@@ -181,6 +181,6 @@ ax.tick_params(axis='both',left=False, top=False, right=False,
                        labelright=False, labelbottom=True)
 
 # save the animation as a gif file
-ani.save('animation.gif', writer='imagemagick')
+#ani.save('animation.gif', writer='imagemagick')
 
-#pyplot.show()
+pyplot.show()
