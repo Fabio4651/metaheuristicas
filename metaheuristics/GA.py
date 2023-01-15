@@ -7,7 +7,7 @@ from matplotlib import pyplot, patches as mpatches
 from scipy.spatial import ConvexHull
 from shapely.geometry import Polygon, Point as PolygonPoint
 
-RADIUS = 0.5
+RADIUS = 0.3
 POINTS_OF_INTEREST_SIZE = 200
 POPULATION_SIZE = 10
 NUM_ITERATIONS = 200
